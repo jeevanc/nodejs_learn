@@ -7,6 +7,11 @@ router.get('/', function(req, res, next) {
 
 });
 
+
+
+
+
+
 //api route
 router.get('/v1', function(req, res, next) {
   var movies = [
