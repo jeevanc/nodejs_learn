@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 var osmtogeojson = require('osmtogeojson');
+var centroid = require('@turf/centroid');
+var feature = require('feature');
 
 router.get('/api/v1/:type', function(req, res, next) {
 
@@ -24,6 +26,11 @@ router.get('/api/v1/:type', function(req, res, next) {
     if (response.statusCode == 200) {
       var response = JSON.parse(response.body);
       var data = osmtogeojson(response);
+      data.features.forEach(function(feature){
+        if (feature.geometry.type == 'Polygon') {
+          feature.geometry = centroid(feature).geometry;
+        }
+      });
       res.json(data);
     }
   });
